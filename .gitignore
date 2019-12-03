@@ -22,3 +22,6 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 trabalho_final_ipf_2019-*.tar
 
+# Also ignore data artifacts 
+*.csv
+

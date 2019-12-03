@@ -3,16 +3,30 @@ defmodule TrabalhoFinalIpf2019 do
   Documentation for TrabalhoFinalIpf2019.
   """
 
-  @doc """
-  Hello world.
+  def obtem_stream(nome_arquivo) do
+    File.stream!(nome_arquivo)
+  end
 
-  ## Examples
+  def troca_virgula_de_coeficiente_por_ponto(string) do
+    String.replace(string, ~r/\"([0-9])\,([0-9])\"/, "\\1.\\2") |> String.trim()
+  end
 
-      iex> TrabalhoFinalIpf2019.hello()
-      :world
+  def cria_lista_de_listas(nome_arquivo) do
+    obtem_stream(nome_arquivo)
+    |> Stream.map(fn line -> troca_virgula_de_coeficiente_por_ponto(line) end)
+    |> processa_linha_a_linha()
+  end
 
-  """
-  def hello do
-    :world
+  def processa_linha_a_linha(stream) do
+    stream |> Enum.map(fn x -> String.split(x, ",") end)
   end
 end
+
+lista = TrabalhoFinalIpf2019.cria_lista_de_listas("AlunosPPGCA.csv")
+
+cabecalho = List.first(lista)
+
+um_aluno = List.last(lista)
+
+Enum.zip(cabecalho, um_aluno)
+|> IO.inspect()

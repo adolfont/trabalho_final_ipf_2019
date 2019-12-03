@@ -1,6 +1,8 @@
 # TrabalhoFinalIpf2019
 
-**TODO: Add description**
+Trabalho Final de Introdução à Programação Funcional 2019.
+
+Disciplina ["Introdução à Programação Funcional"](https://github.com/adolfont/introducao-a-programacao-funcional) oferecida no PPGCA em 2019.
 
 ## Installation
 
