@@ -17,6 +17,11 @@ defmodule TrabalhoFinalIpf2019 do
     |> processa_linha_a_linha()
   end
 
+  def cria_mapas_alunos(lista_alunos) do
+    [ cabecalho | alunos ] = lista_alunos
+    Enum.map(alunos, fn aluno -> Enum.zip(cabecalho, aluno) |> Map.new end )
+  end
+
   def processa_linha_a_linha(stream) do
     stream |> Enum.map(fn x -> String.split(x, ",") end)
   end
