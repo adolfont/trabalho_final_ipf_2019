@@ -25,8 +25,11 @@ defmodule TrabalhoFinalIpf2019Test do
       lista
       |> TrabalhoFinalIpf2019.cria_mapas_alunos()
       |> TrabalhoFinalIpf2019.filtra_alunos_formados()
-    
-    media = Enum.reduce( resultado , 0 , fn x, soma ->  x["Tempo detitulação"]  + soma end ) / length(resultado)
+
+    media =
+      Enum.reduce(resultado, 0, fn x, soma -> x["Tempo detitulação"] + soma end) /
+        length(resultado)
+
     assert media == 883
   end
 
@@ -37,8 +40,11 @@ defmodule TrabalhoFinalIpf2019Test do
       lista
       |> TrabalhoFinalIpf2019.cria_mapas_alunos()
       |> TrabalhoFinalIpf2019.filtra_alunos_desistentes()
-    
-    media = Enum.reduce( resultado , 0 , fn x, soma ->  x["Tempo detitulação"]  + soma end ) / length(resultado)
+
+    media =
+      Enum.reduce(resultado, 0, fn x, soma -> x["Tempo detitulação"] + soma end) /
+        length(resultado)
+
     assert media == 1710.7586206896551
   end
 end
