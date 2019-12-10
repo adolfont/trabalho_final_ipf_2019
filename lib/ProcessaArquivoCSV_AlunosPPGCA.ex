@@ -135,44 +135,94 @@ defmodule ProcessaArquivoCSV_AlunosPPGCA do
     %{aluno | "Coeficiente" => coeficiente}
   end
 
+  defp mostra_resumo_coeficientes(mapa_estatisticas) do
+    IO.puts("- Coeficiente Mínimo: #{mapa_estatisticas[:min]}")
+    IO.puts("- Coeficiente Máximo: #{mapa_estatisticas[:max]}")
+    IO.puts("- Coeficiente Médio: #{mapa_estatisticas[:media]}")
+    IO.puts("- Mediana de Coeficientes: #{mapa_estatisticas[:mediana]}")
+    # IO.puts("- Desvio Padrão: #{mapa_estatisticas[:desvio_padrao]}")
+  end
+
+  def converte_dias_em_anos_e_meses(dias) do
+    dias = floor(dias)
+
+    anos = div(dias, 365)
+    meses = div(rem(dias, 365), 30)
+    dias_puro = dias - anos * 365 - meses * 30
+
+    # "#{dias} dias = #{anos} ano(s),  #{meses} mes(es) e #{dias_puro} dia(s)"
+    "#{anos} ano(s),  #{meses} mes(es) e #{dias_puro} dia(s)"
+  end
+
+  defp mostra_resumo_tempo_de_titulacao(mapa_estatisticas) do
+    IO.puts(
+      "- Tempo de Titulação Mínimo: #{converte_dias_em_anos_e_meses(mapa_estatisticas[:min])}"
+    )
+
+    IO.puts(
+      "- Tempo de Titulação Máximo: #{converte_dias_em_anos_e_meses(mapa_estatisticas[:max])}"
+    )
+
+    IO.puts(
+      "- Tempo de Titulação Médio: #{converte_dias_em_anos_e_meses(mapa_estatisticas[:media])}"
+    )
+
+    IO.puts(
+      "- Mediana de Tempo de Titulação: #{
+        converte_dias_em_anos_e_meses(mapa_estatisticas[:mediana])
+      }"
+    )
+
+    # IO.puts("Desvio Padrão: #{converte_dias_em_anos_e_meses(mapa_estatisticas[:desvio_padrao])}")
+  end
+
   def mostra_estatisticas_gerais() do
-    IO.puts("Calculando Coeficiente")
+    IO.puts("# Coeficientes dos alunos(as) formados(as) pelo PPGCA")
 
-    ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas("AlunosPPGCA.csv")
-    |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
-    |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_formados()
-    |> ProcessaArquivoCSV_AlunosPPGCA.calcula_sumario_aluno("Coeficiente")
-    |> IO.inspect()
+    cria_lista_de_listas("AlunosPPGCA.csv")
+    |> cria_mapas_alunos()
+    |> filtra_alunos_formados()
+    |> calcula_sumario_aluno("Coeficiente")
+    |> mostra_resumo_coeficientes()
 
-    IO.puts("Calculando Tempo de Titulação")
+    IO.puts("")
+    IO.puts("# Tempos de Titulação dos alunos(as) formados(as) pelo PPGCA")
 
-    ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas("AlunosPPGCA.csv")
-    |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
-    |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_formados()
-    |> ProcessaArquivoCSV_AlunosPPGCA.calcula_sumario_aluno("Tempo detitulação")
-    |> IO.inspect()
+    cria_lista_de_listas("AlunosPPGCA.csv")
+    |> cria_mapas_alunos()
+    |> filtra_alunos_formados()
+    |> calcula_sumario_aluno("Tempo detitulação")
+    |> mostra_resumo_tempo_de_titulacao()
   end
 
   def mostra_estatisticas_ano_a_ano() do
-    IO.puts("Calculando Tempo de Titulação Ano a Ano")
+    IO.puts("")
 
-    lista = ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas("AlunosPPGCA.csv")
+    IO.puts(
+      "# Tempos de Titulação dos alunos(as) formados(as) pelo PPGCA por ano de ingresso como regular"
+    )
+
+    lista = cria_lista_de_listas("AlunosPPGCA.csv")
 
     alunos_por_ano =
       lista
-      |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
-      |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_formados()
-      |> ProcessaArquivoCSV_AlunosPPGCA.particiona_por_ano()
+      |> cria_mapas_alunos()
+      |> filtra_alunos_formados()
+      |> particiona_por_ano()
 
     for {ano, lista_alunos} <- alunos_por_ano do
-      IO.puts("Ano = #{ano} com #{length(lista_alunos)} aluno(a)s")
+      IO.puts("")
+      IO.puts("## Ano #{ano} com #{length(lista_alunos)} aluno(a)s")
 
       lista_alunos
-      |> ProcessaArquivoCSV_AlunosPPGCA.calcula_sumario_aluno("Tempo detitulação")
-      |> IO.inspect()
+      |> calcula_sumario_aluno("Tempo detitulação")
+      |> mostra_resumo_tempo_de_titulacao()
     end
   end
 end
+
+# IO.puts(ProcessaArquivoCSV_AlunosPPGCA.converte_dias_em_anos_e_meses(800))
+# IO.puts(ProcessaArquivoCSV_AlunosPPGCA.converte_dias_em_anos_e_meses(800.5))
 
 # ProcessaArquivoCSV_AlunosPPGCA.mostra_estatisticas_gerais()
 # ProcessaArquivoCSV_AlunosPPGCA.mostra_estatisticas_ano_a_ano()
