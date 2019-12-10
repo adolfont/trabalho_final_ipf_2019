@@ -37,20 +37,19 @@ defmodule TrabalhoFinalIpf2019 do
 
   def calcula_sumario_aluno(lista_alunos) do
     lista_alunos = Enum.sort(lista_alunos, &( &1["Tempo detitulação"] <= &2["Tempo detitulação"] ))
-
     %{
       min: Enum.at(lista_alunos,0)["Tempo detitulação"],
       max: Enum.at(lista_alunos,length(lista_alunos)-1)["Tempo detitulação"],
       media: calcula_media(lista_alunos),
       mediana: calcula_mediana(lista_alunos)
     }
-    
   end
   
   def calcula_mediana([]), do: 0 
 
   def calcula_mediana(lista_alunos) when rem( length(lista_alunos) , 2 ) == 1 do
-    Enum.take(lista_alunos, div( length(lista_alunos) , 2 )) 
+    Enum.at(lista_alunos, div( length(lista_alunos) , 2 )) 
+    |> Map.fetch!( "Tempo detitulação" )
   end
 
   def calcula_mediana(lista_alunos) when rem( length(lista_alunos) , 2) == 0 do
@@ -59,9 +58,11 @@ defmodule TrabalhoFinalIpf2019 do
     |> calcula_media()
   end
 
-  def calcula_media(lista_alunos) do
+  def calcula_media(lista_alunos) when length(lista_alunos) > 0 do
     Enum.reduce(lista_alunos, 0 , fn x, soma ->  x["Tempo detitulação"]  + soma end ) / length(lista_alunos)
   end
+
+  def calcula_media([]), do: 0
 
   def processa_linha_a_linha(stream) do
     stream |> Enum.map(fn x -> String.split(x, ",") end)
@@ -91,6 +92,7 @@ end
 TrabalhoFinalIpf2019.cria_lista_de_listas("AlunosPPGCA.csv")
 |> TrabalhoFinalIpf2019.cria_mapas_alunos()
 |> TrabalhoFinalIpf2019.filtra_alunos_formados()
+#|> Enum.take(5)
 |> TrabalhoFinalIpf2019.calcula_sumario_aluno()
 
 # cabecalho = List.first(lista)
