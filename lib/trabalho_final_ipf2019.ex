@@ -31,11 +31,15 @@ defmodule TrabalhoFinalIpf2019 do
 
   def lista_tempo_de_titulacao_em_dias(lista_mapas) do
     lista_mapas
-    |> Enum.map(fn aluno -> processa_campo_tempo_titulacao(aluno["Tempo detitulação"]) end)
+    |> Enum.map(fn aluno -> processa_tempo_titulacao_aluno(aluno) end)
   end
 
   def processa_linha_a_linha(stream) do
     stream |> Enum.map(fn x -> String.split(x, ",") end)
+  end
+
+  defp processa_tempo_titulacao_aluno(aluno) do
+    %{ aluno | "Tempo detitulação" => processa_campo_tempo_titulacao(aluno["Tempo detitulação"]) } 
   end
 
   defp processa_campo_tempo_titulacao(tempo_titulacao) do
