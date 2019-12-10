@@ -1,11 +1,11 @@
-defmodule TrabalhoFinalIpf2019Test do
+defmodule ProcessaArquivoCSV_AlunosPPGCATest do
   use ExUnit.Case
-  doctest TrabalhoFinalIpf2019
+  doctest ProcessaArquivoCSV_AlunosPPGCA
 
   @nome_arquivo "AlunosPPGCA.csv"
 
   test "Obtém último elemento" do
-    lista = TrabalhoFinalIpf2019.cria_lista_de_listas(@nome_arquivo)
+    lista = ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas(@nome_arquivo)
 
     cabecalho = List.first(lista)
 
@@ -19,12 +19,12 @@ defmodule TrabalhoFinalIpf2019Test do
   end
 
   test "Calcula tempo de titulação formados" do
-    lista = TrabalhoFinalIpf2019.cria_lista_de_listas(@nome_arquivo)
+    lista = ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas(@nome_arquivo)
 
     resultado =
       lista
-      |> TrabalhoFinalIpf2019.cria_mapas_alunos()
-      |> TrabalhoFinalIpf2019.filtra_alunos_formados()
+      |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
+      |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_formados()
 
     media =
       Enum.reduce(resultado, 0, fn x, soma -> x["Tempo detitulação"] + soma end) /
@@ -34,12 +34,12 @@ defmodule TrabalhoFinalIpf2019Test do
   end
 
   test "Calcula tempo de titulação desistentes" do
-    lista = TrabalhoFinalIpf2019.cria_lista_de_listas(@nome_arquivo)
+    lista = ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas(@nome_arquivo)
 
     resultado =
       lista
-      |> TrabalhoFinalIpf2019.cria_mapas_alunos()
-      |> TrabalhoFinalIpf2019.filtra_alunos_desistentes()
+      |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
+      |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_desistentes()
 
     media =
       Enum.reduce(resultado, 0, fn x, soma -> x["Tempo detitulação"] + soma end) /

@@ -1,6 +1,6 @@
-defmodule TrabalhoFinalIpf2019 do
+defmodule ProcessaArquivoCSV_AlunosPPGCA do
   @moduledoc """
-  Documentation for TrabalhoFinalIpf2019.
+  Documentation for ProcessaArquivoCSV_AlunosPPGCA.
   """
 
   def obtem_stream(nome_arquivo) do
@@ -134,38 +134,45 @@ defmodule TrabalhoFinalIpf2019 do
 
     %{aluno | "Coeficiente" => coeficiente}
   end
+
+  def mostra_estatisticas_gerais() do
+    IO.puts("Calculando Coeficiente")
+
+    ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas("AlunosPPGCA.csv")
+    |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
+    |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_formados()
+    |> ProcessaArquivoCSV_AlunosPPGCA.calcula_sumario_aluno("Coeficiente")
+    |> IO.inspect()
+
+    IO.puts("Calculando Tempo de Titulação")
+
+    ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas("AlunosPPGCA.csv")
+    |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
+    |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_formados()
+    |> ProcessaArquivoCSV_AlunosPPGCA.calcula_sumario_aluno("Tempo detitulação")
+    |> IO.inspect()
+  end
+
+  def mostra_estatisticas_ano_a_ano() do
+    IO.puts("Calculando Tempo de Titulação Ano a Ano")
+
+    lista = ProcessaArquivoCSV_AlunosPPGCA.cria_lista_de_listas("AlunosPPGCA.csv")
+
+    alunos_por_ano =
+      lista
+      |> ProcessaArquivoCSV_AlunosPPGCA.cria_mapas_alunos()
+      |> ProcessaArquivoCSV_AlunosPPGCA.filtra_alunos_formados()
+      |> ProcessaArquivoCSV_AlunosPPGCA.particiona_por_ano()
+
+    for {ano, lista_alunos} <- alunos_por_ano do
+      IO.puts("Ano = #{ano} com #{length(lista_alunos)} aluno(a)s")
+
+      lista_alunos
+      |> ProcessaArquivoCSV_AlunosPPGCA.calcula_sumario_aluno("Tempo detitulação")
+      |> IO.inspect()
+    end
+  end
 end
 
-IO.puts("Calculando Coeficiente")
-
-TrabalhoFinalIpf2019.cria_lista_de_listas("AlunosPPGCA.csv")
-|> TrabalhoFinalIpf2019.cria_mapas_alunos()
-|> TrabalhoFinalIpf2019.filtra_alunos_formados()
-|> TrabalhoFinalIpf2019.calcula_sumario_aluno("Coeficiente")
-|> IO.inspect()
-
-IO.puts("Calculando Tempo de Titulação")
-
-TrabalhoFinalIpf2019.cria_lista_de_listas("AlunosPPGCA.csv")
-|> TrabalhoFinalIpf2019.cria_mapas_alunos()
-|> TrabalhoFinalIpf2019.filtra_alunos_formados()
-|> TrabalhoFinalIpf2019.calcula_sumario_aluno("Tempo detitulação")
-|> IO.inspect()
-
-IO.puts("Calculando Tempo de Titulação Ano a Ano")
-
-lista = TrabalhoFinalIpf2019.cria_lista_de_listas("AlunosPPGCA.csv")
-
-alunos_por_ano =
-  lista
-  |> TrabalhoFinalIpf2019.cria_mapas_alunos()
-  |> TrabalhoFinalIpf2019.filtra_alunos_formados()
-  |> TrabalhoFinalIpf2019.particiona_por_ano()
-
-for {ano, lista_alunos} <- alunos_por_ano do
-  IO.puts("Ano = #{ano} com #{length(lista_alunos)} aluno(a)s")
-
-  lista_alunos
-  |> TrabalhoFinalIpf2019.calcula_sumario_aluno("Tempo detitulação")
-  |> IO.inspect()
-end
+# ProcessaArquivoCSV_AlunosPPGCA.mostra_estatisticas_gerais()
+# ProcessaArquivoCSV_AlunosPPGCA.mostra_estatisticas_ano_a_ano()
