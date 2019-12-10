@@ -24,6 +24,11 @@ defmodule TrabalhoFinalIpf2019 do
     |> Enum.map(fn aluno -> Enum.zip(cabecalho, aluno) |> Map.new() end)
   end
 
+  def filtra_alunos_formados(lista_alunos) do
+    lista_alunos
+    |> Enum.filter(&(&1["Situação"] == "Formado"))
+  end
+
   def filtra_alunos_desistentes(lista_alunos) do
     lista_alunos
     |> Enum.filter(&(&1["Situação"] == "Desistente"))
